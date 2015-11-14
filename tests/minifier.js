@@ -94,7 +94,13 @@
   test('space normalization around text', function() {
     equal(minify('   <p>blah</p>\n\n\n   '), '<p>blah</p>');
     // tags from collapseWhitespaceSmart()
-    ['a', 'b', 'big', 'button', 'code', 'em', 'font', 'i', 'kbd', 'mark', 'q', 's', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'svg', 'time', 'tt', 'u'].forEach(function(el) {
+    var tags = [
+      'a', 'abbr', 'acronym', 'b', 'bdi', 'bdo', 'big', 'button', 'cite',
+      'code', 'del', 'dfn', 'em', 'font', 'i', 'ins', 'kbd', 'mark', 'q',
+      'rt', 'rp', 's', 'samp', 'small', 'span', 'strike', 'strong',
+      'sub', 'sup', 'svg', 'time', 'tt', 'u', 'var'
+    ];
+    tags.forEach(function(el) {
       equal(minify('<p>foo <' + el + '>baz</' + el + '> bar</p>', { collapseWhitespace: true }), '<p>foo <' + el + '>baz</' + el + '> bar</p>');
       equal(minify('<p>foo<' + el + '>baz</' + el + '>bar</p>', { collapseWhitespace: true }), '<p>foo<' + el + '>baz</' + el + '>bar</p>');
       equal(minify('<p>foo <' + el + '>baz</' + el + '>bar</p>', { collapseWhitespace: true }), '<p>foo <' + el + '>baz</' + el + '>bar</p>');
@@ -961,13 +967,12 @@
     output = '<html><body>' +
       '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="612px" height="502.174px" viewBox="0 65.326 612 502.174" enable-background="new 0 65.326 612 502.174" xml:space="preserve" class="logo">' +
       '<ellipse class="ground" cx="283.5" cy="487.5" rx="259" ry="80"/>' +
-      '<polygon points="100,10 40,198 190,78 10,78 160,198" style="fill:lime;stroke:purple;stroke-width:5;fill-rule:evenodd"/>' +
-      '<filter id="pictureFilter"><feGaussianBlur stdDeviation="15"/></filter>' +
+      '<path fill="#0f0" stroke="purple" stroke-width="5" fill-rule="evenodd" d="M100 10L40 198 190 78H10l150 120z"/>' +
       '</svg>' +
       '</body></html>';
 
     // Should preserve case-sensitivity and closing slashes within svg tags
-    equal(minify(input, { collapseWhitespace: true }), output);
+    equal(minify(input, { collapseWhitespace: true, minifySVG: { lol: 4, cleanupAttrs: true } }), output);
   });
 
   test('nested quotes', function() {
