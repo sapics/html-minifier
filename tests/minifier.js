@@ -1152,6 +1152,19 @@
     }), output);
   });
 
+  test('collapse inline tag whitespace', function() {
+    input = '<button>a</button> <button>b</button>';
+    output = input;
+    equal(minify(input, {
+      collapseWhitespace: true
+    }), output);
+    
+    output = '<button>a</button><button>b</button>';
+    equal(minify(input, {
+      collapseWhitespace: true,
+      collapseInlineTagWhitespace: true
+    }), output);
+  });
 
   test('ignore custom comments', function() {
     input = '<!-- ko if: someExpressionGoesHere --><li>test</li><!-- /ko -->';
